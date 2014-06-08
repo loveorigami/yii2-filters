@@ -13,7 +13,7 @@ $this->title = 'Filtering products';
     <?php foreach ($filters as $filter): ?>
     <label class="checkbox">
         <input type="checkbox" class="j-filter" data-id="<?php echo $filter->id; ?>">
-        <?php echo $filter->name; ?>
+        <?php echo $filter->name; ?> 
     </label>
     <?php endforeach ?>
     
