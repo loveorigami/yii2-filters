@@ -10,7 +10,7 @@ $this->title = 'Filtering products';
 
 <?php if ($filters): ?>
     
-    <?php foreach ($filters as $filter): ?>
+    <?php foreach ($filters as $filter): ?> 
     <label class="checkbox">
         <input type="checkbox" class="j-filter" data-id="<?php echo $filter->id; ?>">
         <?php echo $filter->name; ?> 
