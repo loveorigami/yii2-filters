@@ -43,26 +43,33 @@ class FilterController extends Controller
             }
 
             // Getting product IDs.
-            $productIds = ProductFilterLink::find()
-                ->select('productId')
+            $countFilters = count($filters);
+            $subQuery = (new \yii\db\Query)
+                ->select('productId, COUNT(filterId) as checkSum')
+                ->from(ProductFilterLink::tableName())
                 ->where([
                     'filterId' => $filters,
                     'status'   => ProductFilterLink::STATUS_ACTIVE,
                 ])
-                ->groupBy('productId')
-                ->having(sprintf('COUNT(DISTINCT `filterId`)=%d', count($filters)))
-                ->column();
+                ->groupBy('productId');
+            $count = (new \yii\db\Query)
+                ->select('COUNT(productId)')
+                ->from([$subQuery])
+                ->where([
+                    'checkSum' => $countFilters,
+                ])
+                ->scalar();
 
             // Counting products.
-            $count = $productIds ? count($productIds) : 0;
+            $count = $count ? : 0;
 
-            if ($productIds) {
-                sort($productIds);
-
+            if ($count) {
                 // Getting related filters.
-                $allowedFilters = ProductFilterLink::find()
-                    ->select('DISTINCT(filterId)')
-                    ->where(['productId' => $productIds])
+                $allowedFilters = (new \yii\db\Query)
+                    ->select('DISTINCT(link.filterId)')
+                    ->from([$subQuery, 'link' => ProductFilterLink::tableName()])
+                    ->where(['`0`.checkSum' => $countFilters])
+                    ->andWhere('link.productId=`0`.productId')
                     ->andWhere(['not in', 'filterId', $filters])
                     ->column();
                 if ($allowedFilters) {

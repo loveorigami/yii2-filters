@@ -14,7 +14,7 @@ MinAsset::register($this);
 <head>
     <meta charset="<?= Yii::$app->charset ?>"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><?php echo $this->title; ?>/ basic filters</title>
+    <title><?php echo $this->title; ?> / basic filters</title>
     <?php $this->head(); ?>
 </head>
 <body>
